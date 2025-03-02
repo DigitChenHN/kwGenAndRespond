@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 
 import requests
 from bs4 import BeautifulSoup
+import random
 
 URL = 'https://news.sina.com.cn/'
 
@@ -40,7 +41,7 @@ def get_news_title():
     if not isinstance(titles, list):
         return jsonify({"error": f"Can't get touch with {URL}"})
     # 检查n是否有效
-    if n is None or n < 0 or n > len(predefined_list):
+    if n is None or n < 0 or n > len(titles):
         return jsonify({"error": "Invalid value for 'n'. It must be a non-negative integer less than or equal to the length of the list."}), 400
     
     # 从预定义列表中随机选择n个元素（不重复）

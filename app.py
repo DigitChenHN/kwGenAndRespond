@@ -29,7 +29,6 @@ def get_title(url):
     
     return texts
 
-
 app = Flask(__name__)
 
 @app.route('/news_title', methods=['GET'])
@@ -47,8 +46,7 @@ def get_news_title():
     # 从预定义列表中随机选择n个元素（不重复）
     result = random.sample(titles, n)
 
-    # 返回计算结果
     return jsonify({'result': result})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)  # 在所有网络接口上监听5000端口
+    app.run(host='0.0.0.0', port=5000)  

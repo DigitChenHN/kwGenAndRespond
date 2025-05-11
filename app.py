@@ -81,11 +81,13 @@ class KeywordGen():
 
         messages = [ChatMessage(
         role="user",
-        content=f'这是今天新闻的标题{title}，为了能够更好的了解这则新闻的内容，\
-需要你从这个新闻标题延申，生成{keyword_number}个相关的关键词或句子，方便我在搜索引擎搜索，\
-注意，不要简单的摘取关键词，要进行延申提问。\
-每一个生成的关键词或句子用*标记出来，格式为*关键词或句子*，仅回复关键词或句子即可，不要回复其他内容，\
-生成的关键词的数量不要超过{keyword_number}'
+        content=f'这是今天新闻的标题"{title}"，为了能够更好的了解这则新闻的内容，\
+需要你从这个新闻标题延申，生成{keyword_number}个相关的关键词或句子，方便我在搜索引擎搜索。\
+比如如果新闻标题是“问界M8大定突破70000台”，生成的关键词可以是（但不局限于）*问界M8大定引擎马力*。\
+注意：不要简单地摘取标题中的单词，要进行延申提问。\
+要求：每一个生成的关键词或句子，在前后用两个*号标记出来，格式为*关键词或句子*，\
+比如是3个关键词“韩景敏 本土植物染料”“新疆本土植物染色技术”“多彩新疆 植物染料应用”，则应该输出*韩景敏 本土植物染料*，*新疆本土植物染色技术*，*多彩新疆 植物染料应用*。\
+仅回复关键词或句子即可，不要回复其他内容，生成的关键词的数量不要超过{keyword_number}个'
     )]
         handler = ChunkPrintHandler()
         a = sparkLLM.generate([messages], callbacks=[handler])
@@ -127,9 +129,14 @@ def main():
         result = generator.get_keyword_list(spark, n)
     except Exception as e:
         return jsonify({'error': "llm goes wrong, try later."})
+    try:
+        with open(path, 'w') as file:
+            json.dump(generator.titles, file)
+    except FileNotFoundError:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w') as file:
+            json.dump(generator.titles, file)
 
-    with open(path, 'w') as file:
-                json.dump(generator.titles, file)
                 
     return jsonify({'result': result})
 

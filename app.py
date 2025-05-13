@@ -137,8 +137,10 @@ def main():
         with open(path, 'w') as file:
             json.dump(generator.titles, file)
 
-                
-    return jsonify({'result': result})
+    response = jsonify({'result': result})
+    response.headers.add('Access-Control-Allow-Origin', 'https://cn.bing.com')          
+    # return jsonify({'result': result})
+    return response
 
     
 
